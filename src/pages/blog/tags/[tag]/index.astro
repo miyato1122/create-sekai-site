@@ -3,6 +3,7 @@ import Base from '../../../../layouts/Base.astro';
 import BlogCard from '../../../../components/BlogCard.astro';
 import { SITE } from '../../../../data/site';
 import { getAllBlogs, getUsedTags, type Blog, type Tag } from '../../../../lib/microcms';
+import { href } from '../../../../lib/url';
 
 export async function getStaticPaths() {
   const [blogs, tags] = await Promise.all([getAllBlogs(), getUsedTags()]);
@@ -27,7 +28,7 @@ const { tag, blogs } = Astro.props;
   <h1 class="page-title">#{tag.name}</h1>
   <p class="muted">{blogs.length} 件の記事</p>
   {blogs.map((blog) => <BlogCard blog={blog} />)}
-  <p class="back"><a href="/blog/">← 記事一覧へ</a></p>
+  <p class="back"><a href={href('/blog/')}>← 記事一覧へ</a></p>
 </Base>
 
 <style>

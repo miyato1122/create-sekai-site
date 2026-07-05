@@ -1,5 +1,6 @@
 ---
 import type { Blog } from '../lib/microcms';
+import { href } from '../lib/url';
 import FormattedDate from './FormattedDate.astro';
 
 interface Props {
@@ -11,14 +12,14 @@ const { blog } = Astro.props;
 
 <article class="blog-card">
   <FormattedDate date={blog.publishedAt} />
-  <h3><a href={`/blog/${blog.slug}/`}>{blog.title}</a></h3>
+  <h3><a href={href(`/blog/${blog.slug}/`)}>{blog.title}</a></h3>
   <p class="muted description">{blog.description}</p>
   {
     blog.tags && blog.tags.length > 0 && (
       <ul class="tags">
         {blog.tags.map((tag) => (
           <li>
-            <a href={`/blog/tags/${tag.slug}/`}>#{tag.name}</a>
+            <a href={href(`/blog/tags/${tag.slug}/`)}>#{tag.name}</a>
           </li>
         ))}
       </ul>

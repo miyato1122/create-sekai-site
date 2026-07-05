@@ -1,5 +1,6 @@
 ---
 import { SITE } from '../data/site';
+import { href } from '../lib/url';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import '../styles/global.css';
@@ -24,7 +25,7 @@ const {
 
 const pageTitle = title ? `${title} | ${SITE.title}` : `${SITE.title} - ${SITE.role}`;
 const canonical = new URL(Astro.url.pathname, Astro.site);
-const ogImageUrl = ogImage ?? new URL('/images/og-default.png', Astro.site).href;
+const ogImageUrl = ogImage ?? new URL(href('/images/og-default.png'), Astro.site).href;
 ---
 
 <!doctype html>
@@ -35,12 +36,12 @@ const ogImageUrl = ogImage ?? new URL('/images/og-default.png', Astro.site).href
     <title>{pageTitle}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href={href('/favicon.svg')} type="image/svg+xml" />
     <link
       rel="alternate"
       type="application/rss+xml"
       title={SITE.title}
-      href={new URL('/rss.xml', Astro.site)}
+      href={new URL(href('/rss.xml'), Astro.site)}
     />
     <meta property="og:title" content={pageTitle} />
     <meta property="og:description" content={description} />

@@ -1,0 +1,60 @@
+# 開発ブランチのプレビューを GitHub Pages に公開する（本番デプロイとは無関係）
+# 事前準備: リポジトリの Settings > Pages > Source を「GitHub Actions」にする
+name: Preview (GitHub Pages)
+
+on:
+  push:
+    branches: [claude/personal-site-spec-rcq70e]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      # Pages 未有効ならこのステップで有効化を試みる（失敗する場合は
+      # Settings > Pages > Source を「GitHub Actions」に手動設定する）
+      - uses: actions/configure-pages@v5
+        with:
+          enablement: true
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build (Pages 用に site/base を上書き)
+        run: pnpm build
+        env:
+          SITE_URL: https://${{ github.repository_owner }}.github.io
+          BASE_PATH: /${{ github.event.repository.name }}
+          # Secrets 未設定ならモックデータでビルドされる
+          MICROCMS_SERVICE_DOMAIN: ${{ secrets.MICROCMS_SERVICE_DOMAIN }}
+          MICROCMS_API_KEY: ${{ secrets.MICROCMS_API_KEY }}
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+      - id: deployment
+        uses: actions/deploy-pages@v4

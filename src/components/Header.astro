@@ -1,13 +1,14 @@
 ---
 import { SITE } from '../data/site';
+import { href } from '../lib/url';
 import ThemeToggle from './ThemeToggle.vue';
 ---
 
 <header>
   <div class="container inner">
-    <a href="/" class="site-name">{SITE.title}</a>
+    <a href={href('/')} class="site-name">{SITE.title}</a>
     <nav aria-label="メイン">
-      <a href="/blog/">Blog</a>
+      <a href={href('/blog/')}>Blog</a>
       <ThemeToggle client:load />
     </nav>
   </div>

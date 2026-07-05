@@ -1,12 +1,13 @@
 ---
 import Base from '../layouts/Base.astro';
+import { href } from '../lib/url';
 ---
 
 <Base title="ページが見つかりません">
   <section class="notfound">
     <h1>404</h1>
     <p>お探しのページは見つかりませんでした。</p>
-    <p><a href="/">トップページへ戻る</a></p>
+    <p><a href={href('/')}>トップページへ戻る</a></p>
   </section>
 </Base>
 

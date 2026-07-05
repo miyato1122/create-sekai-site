@@ -4,6 +4,7 @@ import BlogCard from '../components/BlogCard.astro';
 import { SITE, ABOUT_LINES, SKILLS } from '../data/site';
 import { WORKS } from '../data/works';
 import { getAllBlogs } from '../lib/microcms';
+import { href } from '../lib/url';
 
 const blogs = await getAllBlogs();
 const latestBlogs = blogs.slice(0, 3);
@@ -89,7 +90,7 @@ const jsonLd = {
   <section class="section" aria-labelledby="blog">
     <h2 class="section-title" id="blog">Blog</h2>
     {latestBlogs.map((blog) => <BlogCard blog={blog} />)}
-    <p class="more"><a href="/blog/">記事一覧へ →</a></p>
+    <p class="more"><a href={href('/blog/')}>記事一覧へ →</a></p>
   </section>
 
   <!-- Contact -->

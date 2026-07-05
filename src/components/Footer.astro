@@ -1,12 +1,13 @@
 ---
 import { SITE } from '../data/site';
+import { href } from '../lib/url';
 const year = new Date().getFullYear();
 ---
 
 <footer>
   <div class="container inner">
     <p class="muted">© {year} {SITE.handle}</p>
-    <p><a href="/rss.xml">RSS</a></p>
+    <p><a href={href('/rss.xml')}>RSS</a></p>
   </div>
 </footer>
 

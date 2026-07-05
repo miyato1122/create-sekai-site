@@ -3,6 +3,7 @@ import Base from '../../../layouts/Base.astro';
 import FormattedDate from '../../../components/FormattedDate.astro';
 import { SITE } from '../../../data/site';
 import { getAllBlogs, type Blog } from '../../../lib/microcms';
+import { href } from '../../../lib/url';
 
 export async function getStaticPaths() {
   const blogs = await getAllBlogs();
@@ -31,7 +32,7 @@ const jsonLd = {
     name: SITE.author,
     url: SITE.url,
   },
-  mainEntityOfPage: new URL(`/blog/${blog.slug}/`, Astro.site).href,
+  mainEntityOfPage: new URL(href(`/blog/${blog.slug}/`), Astro.site).href,
 };
 ---
 
@@ -51,7 +52,7 @@ const jsonLd = {
           <ul class="tags">
             {blog.tags.map((tag) => (
               <li>
-                <a href={`/blog/tags/${tag.slug}/`}>#{tag.name}</a>
+                <a href={href(`/blog/tags/${tag.slug}/`)}>#{tag.name}</a>
               </li>
             ))}
           </ul>
@@ -71,7 +72,7 @@ const jsonLd = {
     }
     <div class="prose" set:html={blog.content} />
   </article>
-  <p class="back"><a href="/blog/">← 記事一覧へ</a></p>
+  <p class="back"><a href={href('/blog/')}>← 記事一覧へ</a></p>
 </Base>
 
 <style>

@@ -5,6 +5,7 @@ import BlogCard from '../../components/BlogCard.astro';
 import Pagination from '../../components/Pagination.astro';
 import { SITE } from '../../data/site';
 import { getAllBlogs, getUsedTags } from '../../lib/microcms';
+import { href } from '../../lib/url';
 
 export const getStaticPaths = (async ({ paginate }) => {
   const blogs = await getAllBlogs();
@@ -22,7 +23,7 @@ const tags = await getUsedTags();
       <ul class="tag-nav">
         {tags.map((tag) => (
           <li>
-            <a href={`/blog/tags/${tag.slug}/`}>#{tag.name}</a>
+            <a href={href(`/blog/tags/${tag.slug}/`)}>#{tag.name}</a>
           </li>
         ))}
       </ul>
