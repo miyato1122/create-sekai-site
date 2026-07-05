@@ -1,0 +1,31 @@
+---
+interface Props {
+  prevUrl?: string;
+  nextUrl?: string;
+  current: number;
+  last: number;
+}
+
+const { prevUrl, nextUrl, current, last } = Astro.props;
+---
+
+{
+  last > 1 && (
+    <nav class="pagination" aria-label="ページネーション">
+      {prevUrl ? <a href={prevUrl}>← 前のページ</a> : <span />}
+      <span class="muted">
+        {current} / {last}
+      </span>
+      {nextUrl ? <a href={nextUrl}>次のページ →</a> : <span />}
+    </nav>
+  )
+}
+
+<style>
+  .pagination {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 2rem 0;
+  }
+</style>

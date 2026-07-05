@@ -1,0 +1,22 @@
+---
+interface Props {
+  date: string;
+}
+
+const { date } = Astro.props;
+const d = new Date(date);
+const display = d.toLocaleDateString('ja-JP', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+  timeZone: 'Asia/Tokyo',
+});
+---
+
+<time datetime={d.toISOString()} class="muted">{display}</time>
+
+<style>
+  time {
+    font-size: 0.85rem;
+  }
+</style>

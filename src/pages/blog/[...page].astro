@@ -1,0 +1,56 @@
+---
+import type { GetStaticPaths } from 'astro';
+import Base from '../../layouts/Base.astro';
+import BlogCard from '../../components/BlogCard.astro';
+import Pagination from '../../components/Pagination.astro';
+import { SITE } from '../../data/site';
+import { getAllBlogs, getUsedTags } from '../../lib/microcms';
+
+export const getStaticPaths = (async ({ paginate }) => {
+  const blogs = await getAllBlogs();
+  return paginate(blogs, { pageSize: SITE.blogPageSize });
+}) satisfies GetStaticPaths;
+
+const { page } = Astro.props;
+const tags = await getUsedTags();
+---
+
+<Base title="Blog" description={`${SITE.title} のブログ記事一覧`}>
+  <h1 class="page-title">Blog</h1>
+  {
+    tags.length > 0 && (
+      <ul class="tag-nav">
+        {tags.map((tag) => (
+          <li>
+            <a href={`/blog/tags/${tag.slug}/`}>#{tag.name}</a>
+          </li>
+        ))}
+      </ul>
+    )
+  }
+  {page.data.length === 0 && <p class="muted">まだ記事がありません。</p>}
+  {page.data.map((blog) => <BlogCard blog={blog} />)}
+  <Pagination
+    prevUrl={page.url.prev}
+    nextUrl={page.url.next}
+    current={page.currentPage}
+    last={page.lastPage}
+  />
+</Base>
+
+<style>
+  .page-title {
+    margin: 2.5rem 0 1rem;
+    font-size: 1.6rem;
+  }
+
+  .tag-nav {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    padding: 0;
+    margin: 0 0 1.5rem;
+    font-size: 0.9rem;
+  }
+</style>

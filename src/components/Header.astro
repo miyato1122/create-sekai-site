@@ -1,0 +1,44 @@
+---
+import { SITE } from '../data/site';
+import ThemeToggle from './ThemeToggle.vue';
+---
+
+<header>
+  <div class="container inner">
+    <a href="/" class="site-name">{SITE.title}</a>
+    <nav aria-label="メイン">
+      <a href="/blog/">Blog</a>
+      <ThemeToggle client:load />
+    </nav>
+  </div>
+</header>
+
+<style>
+  header {
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+  }
+
+  .site-name {
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: var(--color-text);
+  }
+
+  nav {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+  }
+
+  nav a {
+    color: var(--color-text);
+  }
+</style>

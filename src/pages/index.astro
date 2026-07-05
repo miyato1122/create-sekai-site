@@ -1,0 +1,209 @@
+---
+import Base from '../layouts/Base.astro';
+import BlogCard from '../components/BlogCard.astro';
+import { SITE, ABOUT_LINES, SKILLS } from '../data/site';
+import { WORKS } from '../data/works';
+import { getAllBlogs } from '../lib/microcms';
+
+const blogs = await getAllBlogs();
+const latestBlogs = blogs.slice(0, 3);
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: SITE.author,
+  alternateName: SITE.handle,
+  jobTitle: SITE.role,
+  email: `mailto:${SITE.email}`,
+  url: SITE.url,
+  sameAs: Object.values(SITE.social),
+};
+---
+
+<Base jsonLd={jsonLd}>
+  <!-- Hero / プロフィール -->
+  <section class="section hero">
+    <!-- TODO(社長確認): アイコン画像を public/images/avatar.png に配置して差し替える -->
+    <div class="avatar" aria-hidden="true">CS</div>
+    <h1>{SITE.author}</h1>
+    <p class="muted">{SITE.handle} / {SITE.role}</p>
+    <ul class="social">
+      <li><a href={SITE.social.github} target="_blank" rel="noopener noreferrer">GitHub</a></li>
+      <li><a href={SITE.social.x} target="_blank" rel="noopener noreferrer">X</a></li>
+      <li><a href={SITE.social.zenn} target="_blank" rel="noopener noreferrer">Zenn</a></li>
+    </ul>
+  </section>
+
+  <!-- About -->
+  <section class="section" aria-labelledby="about">
+    <h2 class="section-title" id="about">About</h2>
+    {ABOUT_LINES.map((line) => <p>{line}</p>)}
+  </section>
+
+  <!-- Skills / Stack -->
+  <section class="section" aria-labelledby="skills">
+    <h2 class="section-title" id="skills">Skills / Stack</h2>
+    <dl class="skills">
+      {
+        SKILLS.map((group) => (
+          <div class="skill-row">
+            <dt>{group.category}</dt>
+            <dd>{group.items.join(' / ')}</dd>
+          </div>
+        ))
+      }
+    </dl>
+  </section>
+
+  <!-- Works -->
+  <section class="section" aria-labelledby="works">
+    <h2 class="section-title" id="works">Works</h2>
+    <div class="works">
+      {
+        WORKS.map((work) => (
+          <article class="work-card">
+            {work.image ? (
+              <img src={work.image} alt={`${work.title} のスクリーンショット`} loading="lazy" />
+            ) : (
+              <div class="work-placeholder" aria-hidden="true">
+                No Image
+              </div>
+            )}
+            <h3>
+              {work.url ? (
+                <a href={work.url} target="_blank" rel="noopener noreferrer">
+                  {work.title}
+                </a>
+              ) : (
+                work.title
+              )}
+            </h3>
+            <p class="muted">{work.description}</p>
+          </article>
+        ))
+      }
+    </div>
+  </section>
+
+  <!-- Blog -->
+  <section class="section" aria-labelledby="blog">
+    <h2 class="section-title" id="blog">Blog</h2>
+    {latestBlogs.map((blog) => <BlogCard blog={blog} />)}
+    <p class="more"><a href="/blog/">記事一覧へ →</a></p>
+  </section>
+
+  <!-- Contact -->
+  <section class="section" aria-labelledby="contact">
+    <h2 class="section-title" id="contact">Contact</h2>
+    <p>
+      お仕事のご相談・お問い合わせは
+      <a href={`mailto:${SITE.email}`}>{SITE.email}</a>
+      までお気軽にどうぞ。
+    </p>
+  </section>
+</Base>
+
+<style>
+  .hero {
+    text-align: center;
+    margin-top: 3rem;
+  }
+
+  .hero h1 {
+    margin: 0.75rem 0 0.25rem;
+    font-size: 1.75rem;
+  }
+
+  .hero p {
+    margin: 0;
+  }
+
+  .avatar {
+    width: 96px;
+    height: 96px;
+    margin: 0 auto;
+    border-radius: 50%;
+    background: var(--color-code-bg);
+    border: 1px solid var(--color-border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 1.5rem;
+    color: var(--color-text-muted);
+  }
+
+  .social {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    padding: 0;
+    margin: 1rem 0 0;
+  }
+
+  .skills {
+    margin: 0;
+  }
+
+  .skill-row {
+    display: grid;
+    grid-template-columns: 10rem 1fr;
+    gap: 0.5rem;
+    padding: 0.5rem 0;
+  }
+
+  .skill-row dt {
+    font-weight: 600;
+  }
+
+  .skill-row dd {
+    margin: 0;
+  }
+
+  @media (max-width: 600px) {
+    .skill-row {
+      grid-template-columns: 1fr;
+      gap: 0;
+    }
+  }
+
+  .works {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .work-card img,
+  .work-placeholder {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 1px solid var(--color-border);
+  }
+
+  .work-placeholder {
+    background: var(--color-code-bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-text-muted);
+    font-size: 0.9rem;
+  }
+
+  .work-card h3 {
+    margin: 0.75rem 0 0.25rem;
+    font-size: 1.05rem;
+  }
+
+  .work-card p {
+    margin: 0;
+    font-size: 0.9rem;
+  }
+
+  .more {
+    margin-top: 1.5rem;
+    text-align: right;
+  }
+</style>
