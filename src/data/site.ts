@@ -1,10 +1,9 @@
 // サイト全体で使う定数。
-// TODO(社長確認): 名前・自己紹介・SNSリンクなどの実データは公開前に確認して差し替える。
+// TODO(社長確認): 自己紹介・SNSリンクなどの実データは公開前に確認して差し替える。
 
 export const SITE = {
   title: 'createSEKAI',
-  // TODO(社長確認): 実名の表記（漢字・ローマ字）を確認
-  author: '比嘉 智明', // プレースホルダ（メールアドレスからの推定。要確認）
+  author: 'Tomoaki Higa',
   handle: 'createSEKAI',
   role: 'フリーランスエンジニア',
   description:
