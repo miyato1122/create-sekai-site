@@ -24,8 +24,9 @@ const jsonLd = {
 <Base jsonLd={jsonLd}>
   <!-- Hero / プロフィール -->
   <section class="section hero">
-    <!-- TODO(社長確認): アイコン画像を public/images/avatar.png に配置して差し替える -->
-    <div class="avatar" aria-hidden="true">CS</div>
+    <div class="avatar" aria-hidden="true">
+      <img src="/images/avatar.jpg" alt="profile image" />
+    </div>
     <h1>{SITE.author}</h1>
     <p class="muted">{SITE.handle} / {SITE.role}</p>
     <ul class="social">
@@ -120,8 +121,8 @@ const jsonLd = {
   }
 
   .avatar {
-    width: 96px;
-    height: 96px;
+    width: 240px;
+    height: 240px;
     margin: 0 auto;
     border-radius: 50%;
     background: var(--color-code-bg);
