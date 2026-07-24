@@ -28,7 +28,7 @@ export const CAREERS: {
 }[] = [
   {
     company: 'フリーランス',
-    dates: '20XX年X月 - 現在',
+    dates: '2021年1月 - 現在',
     description: [
       '業務委託で主に以下のソフトウェアを開発。 ',
       '・電力会社向けGIS',
@@ -40,12 +40,12 @@ export const CAREERS: {
   },
   {
     company: '株式会社アーバンリサーチ',
-    dates: '20XX年X月 - 20XX年X月',
+    dates: '2019年4月 - 2020年12月',
     description: ['ECサイト・CRM・スマートフォンアプリの運用管理を担当。'],
   },
   {
     company: '国際航業株式会社',
-    dates: '20XX年X月 - 20XX年X月',
+    dates: '2014年4月 - 2019年3月',
     description: ['自治体向けGIS（統合型GIS/公開型GIS/防災GIS/上下水GIS/etc..）の導入を担当。','GISデータの作成・加工も行う。'],
   }
 ];
