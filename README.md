@@ -2,7 +2,7 @@
 
 [createSEKAI](https://dev.create-sekai.com) の個人サイト（ブログ付き）。
 
-- **フレームワーク**: [Astro](https://astro.build/)（SSG）+ [Vue 3](https://vuejs.org/)（islands: テーマトグルのみ）
+- **フレームワーク**: [Astro](https://astro.build/)（SSG）
 - **CMS**: [microCMS](https://microcms.io/)（Hobbyプラン）
 - **ホスティング**: Cloudflare Workers（静的アセット配信）
 - **スタイリング**: 素のCSS（1カラム・ミニマル・ダークモード対応）
@@ -88,7 +88,7 @@ Hobby プランで API 2 個を使用（管理画面で手動作成。フィー�
 
 ```
 src/
-  components/   … Astro/Vue コンポーネント（ThemeToggle.vue が唯一の island）
+  components/   … Astro コンポーネント（テーマトグル含む）
   data/         … サイト定数・Works データ（ハードコード）
   layouts/      … ベースレイアウト（OGP・JSON-LD・ダークモード）
   lib/          … microCMS クライアント（未接続時はモック）
