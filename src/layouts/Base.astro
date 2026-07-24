@@ -1,0 +1,72 @@
+---
+import { SITE } from '../data/site';
+import { href } from '../lib/url';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import '../styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+  /** OGP画像のURL（絶対URL）。未指定ならデフォルトOG画像 */
+  ogImage?: string;
+  ogType?: 'website' | 'article';
+  /** JSON-LD を挿入したい場合に渡す */
+  jsonLd?: Record<string, unknown>;
+}
+
+const {
+  title,
+  description = SITE.description,
+  ogImage,
+  ogType = 'website',
+  jsonLd,
+} = Astro.props;
+
+const pageTitle = title ? `${title} | ${SITE.title}` : `${SITE.title} - ${SITE.role}`;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const ogImageUrl = ogImage ?? new URL(href('/images/og-default.png'), Astro.site).href;
+---
+
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" href={href('/favicon.svg')} type="image/svg+xml" />
+    <link
+      rel="alternate"
+      type="application/rss+xml"
+      title={SITE.title}
+      href={new URL(href('/rss.xml'), Astro.site)}
+    />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content={ogType} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImageUrl} />
+    <meta property="og:site_name" content={SITE.title} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImageUrl} />
+    {jsonLd && <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />}
+    <script is:inline>
+      // FOUC回避のため、保存済みテーマを描画前に適用する
+      const saved = localStorage.getItem('theme');
+      if (saved === 'light' || saved === 'dark') {
+        document.documentElement.dataset.theme = saved;
+      }
+    </script>
+  </head>
+  <body>
+    <Header />
+    <main class="container">
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>

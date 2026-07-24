@@ -1,0 +1,28 @@
+---
+import { SITE } from '../data/site';
+import { href } from '../lib/url';
+const year = new Date().getFullYear();
+---
+
+<footer>
+  <div class="container inner">
+    <p class="muted">© {year} {SITE.handle}</p>
+    <!-- NOTE: フッターのRSSリンクは一旦非表示にする -->
+    <!-- <p><a href={href('/rss.xml')}>RSS</a></p> -->
+  </div>
+</footer>
+
+<style>
+  footer {
+    border-top: 1px solid var(--color-border);
+    margin-top: 4rem;
+  }
+
+  .inner {
+    display: flex;
+    justify-content: space-between;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    font-size: 0.9rem;
+  }
+</style>

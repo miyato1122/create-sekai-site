@@ -1,0 +1,43 @@
+---
+import Base from '../../../../layouts/Base.astro';
+import BlogCard from '../../../../components/BlogCard.astro';
+import { SITE } from '../../../../data/site';
+import { getAllBlogs, getUsedTags, type Blog, type Tag } from '../../../../lib/microcms';
+import { href } from '../../../../lib/url';
+
+export async function getStaticPaths() {
+  const [blogs, tags] = await Promise.all([getAllBlogs(), getUsedTags()]);
+  return tags.map((tag) => ({
+    params: { tag: tag.slug },
+    props: {
+      tag,
+      blogs: blogs.filter((blog) => blog.tags?.some((t) => t.slug === tag.slug)),
+    },
+  }));
+}
+
+interface Props {
+  tag: Tag;
+  blogs: Blog[];
+}
+
+const { tag, blogs } = Astro.props;
+---
+
+<Base title={`#${tag.name} の記事`} description={`${SITE.title} の「${tag.name}」タグの記事一覧`}>
+  <h1 class="page-title">#{tag.name}</h1>
+  <p class="muted">{blogs.length} 件の記事</p>
+  {blogs.map((blog) => <BlogCard blog={blog} />)}
+  <p class="back"><a href={href('/blog/')}>← 記事一覧へ</a></p>
+</Base>
+
+<style>
+  .page-title {
+    margin: 2.5rem 0 0.5rem;
+    font-size: 1.6rem;
+  }
+
+  .back {
+    margin-top: 2rem;
+  }
+</style>
