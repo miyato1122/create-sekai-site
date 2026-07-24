@@ -1,8 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import BlogCard from '../components/BlogCard.astro';
-import { SITE, ABOUT_LINES, SKILLS } from '../data/site';
-import { WORKS } from '../data/works';
+import { SITE, ABOUT_LINES, CAREERS } from '../data/site';
 import { getAllBlogs } from '../lib/microcms';
 import { href } from '../lib/url';
 
@@ -28,11 +27,10 @@ const jsonLd = {
       <img src="/images/avatar.jpg" alt="profile image" />
     </div>
     <h1>{SITE.author}</h1>
-    <p class="muted">{SITE.handle} / {SITE.role}</p>
+    <p class="muted">{SITE.role}</p>
     <ul class="social">
-      <li><a href={SITE.social.github} target="_blank" rel="noopener noreferrer">GitHub</a></li>
       <li><a href={SITE.social.x} target="_blank" rel="noopener noreferrer">X</a></li>
-      <li><a href={SITE.social.zenn} target="_blank" rel="noopener noreferrer">Zenn</a></li>
+      <li><a href={SITE.social.github} target="_blank" rel="noopener noreferrer">GitHub</a></li>
     </ul>
   </section>
 
@@ -40,59 +38,49 @@ const jsonLd = {
   <section class="section" aria-labelledby="about">
     <h2 class="section-title" id="about">About</h2>
     {ABOUT_LINES.map((line) => <p>{line}</p>)}
+    <p>
+      お仕事のご相談は
+      <a href={href('/#contact')}>Contact</a>
+      からお気軽にご連絡ください。
+    </p>
   </section>
 
-  <!-- Skills / Stack -->
-  <section class="section" aria-labelledby="skills">
-    <h2 class="section-title" id="skills">Skills / Stack</h2>
-    <dl class="skills">
+  <!-- Careers -->
+  <section class="section" aria-labelledby="careers">
+    <h2 class="section-title" id="careers">Careers</h2>
+    <ol class="career-timeline">
       {
-        SKILLS.map((group) => (
-          <div class="skill-row">
-            <dt>{group.category}</dt>
-            <dd>{group.items.join(' / ')}</dd>
-          </div>
+        CAREERS.map((career) => (
+          <li class="career-entry">
+            <time class="career-dates">{career.dates}</time>
+            <h3 class="career-company">{career.company}</h3>
+            {career.description.map((line) => (
+              <p class="career-desc">{line}</p>
+            ))}
+          </li>
         ))
       }
-    </dl>
+    </ol>
   </section>
 
   <!-- Works -->
   <section class="section" aria-labelledby="works">
     <h2 class="section-title" id="works">Works</h2>
     <div class="works">
-      {
-        WORKS.map((work) => (
-          <article class="work-card">
-            {work.image ? (
-              <img src={work.image} alt={`${work.title} のスクリーンショット`} loading="lazy" />
-            ) : (
-              <div class="work-placeholder" aria-hidden="true">
-                No Image
-              </div>
-            )}
-            <h3>
-              {work.url ? (
-                <a href={work.url} target="_blank" rel="noopener noreferrer">
-                  {work.title}
-                </a>
-              ) : (
-                work.title
-              )}
-            </h3>
-            <p class="muted">{work.description}</p>
-          </article>
-        ))
-      }
+      （準備中）
     </div>
   </section>
 
   <!-- Blog -->
-  <section class="section" aria-labelledby="blog">
-    <h2 class="section-title" id="blog">Blog</h2>
-    {latestBlogs.map((blog) => <BlogCard blog={blog} />)}
-    <p class="more"><a href={href('/blog/')}>記事一覧へ →</a></p>
-  </section>
+  {
+    latestBlogs.length > 0 && (
+      <section class="section" aria-labelledby="blog">
+        <h2 class="section-title" id="blog">Blog</h2>
+        {latestBlogs.map((blog) => <BlogCard blog={blog} />)}
+        <p class="more"><a href={href('/blog/')}>記事一覧へ →</a></p>
+      </section>
+    )
+  }
 
   <!-- Contact -->
   <section class="section" aria-labelledby="contact">
@@ -161,6 +149,55 @@ const jsonLd = {
 
   .skill-row dd {
     margin: 0;
+  }
+
+  .career-timeline {
+    list-style: none;
+    margin: 0;
+    padding: 0 0 0 1.25rem;
+    border-left: 2px solid var(--color-border);
+  }
+
+  .career-entry {
+    position: relative;
+    padding: 0 0 2rem 1.25rem;
+  }
+
+  .career-entry:last-child {
+    padding-bottom: 0;
+  }
+
+  .career-entry::before {
+    content: '';
+    position: absolute;
+    top: 0.45rem;
+    left: -1.4rem;
+    width: 0.65rem;
+    height: 0.65rem;
+    border-radius: 50%;
+    background: var(--color-bg);
+    border: 2px solid var(--color-accent);
+  }
+
+  .career-dates {
+    display: block;
+    margin: 0;
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+  }
+
+  .career-company {
+    margin: 0.2rem 0 0;
+    font-size: 1.1rem;
+  }
+
+  .career-desc {
+    margin: 0.5rem 0 0;
+    font-size: 0.95rem;
+  }
+
+  .career-desc + .career-desc {
+    margin-top: 0.35rem;
   }
 
   @media (max-width: 600px) {

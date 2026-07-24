@@ -1,34 +1,51 @@
 // サイト全体で使う定数。
-// TODO(社長確認): 自己紹介・SNSリンクなどの実データは公開前に確認して差し替える。
 
 export const SITE = {
   title: 'createSEKAI',
   author: 'Tomoaki Higa',
   handle: 'createSEKAI',
-  role: 'フリーランスエンジニア',
+  role: 'ソフトウェア＆GISエンジニア',
   description:
-    'フリーランスエンジニア（屋号: createSEKAI）の個人サイト。Vue / TypeScript を中心としたフロントエンド開発、GIS・点群などの技術記事と実績を掲載しています。',
-  email: 'tomoaki.higa@create-sekai.com',
-  url: 'https://dev.create-sekai.com',
-  // TODO(社長確認): 各SNSの実アカウントURLに差し替える
+    'GISを中心としたソフトウェア開発を行なっているcreateSEKAIの事業サイトです。',
+  email: 'contact@create-sekai.com',
+  url: 'https://create-sekai.com',
   social: {
     github: 'https://github.com/miyato1122',
-    x: 'https://x.com/PLACEHOLDER',
-    zenn: 'https://zenn.dev/PLACEHOLDER',
+    x: 'https://x.com/htomo1122',
   },
   blogPageSize: 10,
 } as const;
 
-// TODO(社長確認): 3〜5行の自己紹介文の実データ
 export const ABOUT_LINES = [
-  'フリーランスエンジニアとして、Web フロントエンドを中心に開発をしています。',
-  '主なスタックは Vue / TypeScript。GIS・3D点群の可視化など、地理空間データを扱うプロダクト開発の経験があります。',
-  '屋号「createSEKAI」として活動中。お仕事のご相談は Contact からお気軽にどうぞ。',
+  'GISを中心としたソフトウェア開発を行なっています。',
+  'GIS以外にも、Vue.js / Nuxt / TypeScript を用いたソフトウェアのフロントエンド開発、サイト制作も行なっています。',
 ];
 
-// TODO(社長確認): スキルの実データを確認して調整する
-export const SKILLS: { category: string; items: string[] }[] = [
-  { category: 'Frontend', items: ['Vue 3', 'TypeScript', 'Nuxt', 'Astro', 'Tailwind CSS'] },
-  { category: 'GIS / 3D', items: ['Cesium', 'MapLibre GL JS', '点群データ処理'] },
-  { category: 'Backend / Infra', items: ['Node.js', 'Cloudflare Workers', 'GitHub Actions'] },
+export const CAREERS: {
+  company: string;
+  dates: string;
+  description: string[];
+}[] = [
+  {
+    company: 'フリーランス',
+    dates: '20XX年X月 - 現在',
+    description: [
+      '業務委託で主に以下のソフトウェアを開発。 ',
+      '・電力会社向けGIS',
+      '・自治体向け防災GIS',
+      '・自治体向け開発許可GIS',
+      '・受発注システム',
+      '・企業HP制作',
+    ],
+  },
+  {
+    company: '株式会社アーバンリサーチ',
+    dates: '20XX年X月 - 20XX年X月',
+    description: ['ECサイト・CRM・スマートフォンアプリの運用管理を担当。'],
+  },
+  {
+    company: '国際航業株式会社',
+    dates: '20XX年X月 - 20XX年X月',
+    description: ['自治体向けGIS（統合型GIS/公開型GIS/防災GIS/上下水GIS/etc..）の導入を担当。','GISデータの作成・加工も行う。'],
+  }
 ];
