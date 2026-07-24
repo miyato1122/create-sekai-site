@@ -1,7 +1,7 @@
 ---
 import { SITE } from '../data/site';
 import { href } from '../lib/url';
-import ThemeToggle from './ThemeToggle.vue';
+import ThemeToggle from './ThemeToggle.astro';
 ---
 
 <header>
@@ -10,7 +10,7 @@ import ThemeToggle from './ThemeToggle.vue';
     <nav aria-label="メイン">
       <!-- NOTE: ヘッダーのBlogリンクは一旦非表示にする -->
       <!-- <a href={href('/blog/')}>Blog</a> -->
-      <ThemeToggle client:load />
+      <ThemeToggle />
     </nav>
   </div>
 </header>
