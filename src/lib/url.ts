@@ -1,3 +1,4 @@
+// TODO: Github Pages が不要になればファイルを削除する
 // GitHub Pages プレビュー（サブパス配信）でもリンクが壊れないよう、
 // サイト内リンクは必ずこのヘルパーを通す。
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');

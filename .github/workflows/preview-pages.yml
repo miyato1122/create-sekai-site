@@ -1,3 +1,4 @@
+# TODO: Github Pages が不要になればファイルを削除する
 # 開発ブランチのプレビューを GitHub Pages に公開する（本番デプロイとは無関係）
 # 事前準備: リポジトリの Settings > Pages > Source を「GitHub Actions」にする
 name: Preview (GitHub Pages)
