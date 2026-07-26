@@ -59,11 +59,11 @@ export const CAREERS: {
   {
     company: '株式会社アーバンリサーチ',
     dates: '2019年4月 - 2020年12月',
-    description: ['ECサイト・CRM・スマートフォンアプリの運用管理を担当。'],
+    description: ['ECサイト・CRM・スマートフォンアプリの運用管理。'],
   },
   {
     company: '国際航業株式会社',
     dates: '2014年4月 - 2019年3月',
-    description: ['自治体向けGIS（統合型GIS/公開型GIS/防災GIS/上下水GIS/etc..）の導入を担当。','GISデータの作成・加工も行う。'],
+    description: ['自治体向けGIS（統合型GIS/公開型GIS/防災GIS/上下水GIS/etc..）の導入。','GIS搭載データの作成・加工。'],
   }
 ];
