@@ -64,8 +64,6 @@ microCMS 管理画面の Webhook（カスタム通知）に GitHub API を設定
 
 `create-sekai.com` を Workers のカスタムドメインとして接続する（Cloudflare ダッシュボード > Workers > 設定 > ドメインとルート。メール用の既存 DNS レコードには触らない）。
 
-`dev.create-sekai.com` は staging として残す。`public/_headers` で `X-Robots-Tag: noindex, nofollow` を付けており、検索結果には出ない。
-
 `www.create-sekai.com` を使う場合は Cloudflare の Redirect Rules で `https://create-sekai.com/` へ 301 リダイレクトする。
 
 ## SEO

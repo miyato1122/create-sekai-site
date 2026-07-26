@@ -2,11 +2,6 @@
 # このファイル自体はアセットとして配信されず、ルールとして解釈される。
 # 参考: https://developers.cloudflare.com/workers/static-assets/headers/
 
-# staging（dev サブドメイン）を検索結果に出さない。
-# ホスト名のワイルドカード指定には既知の不具合があるため完全一致で書くこと。
-https://dev.create-sekai.com/*
-  X-Robots-Tag: noindex, nofollow
-
 # Astro が出力するアセットはファイル名にハッシュが含まれるので、長期キャッシュして良い。
 /_astro/*
   Cache-Control: public, max-age=31536000, immutable

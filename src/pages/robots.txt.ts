@@ -4,7 +4,7 @@ import type { APIRoute } from 'astro';
 const PRODUCTION_HOSTNAME = 'create-sekai.com';
 
 // robots.txt は静的ファイルにせず、Astro.site（= SITE_URL）から組み立てる。
-// これにより GitHub Pages プレビューや staging では自動で Disallow になり、
+// これにより GitHub Pages プレビューなど本番ホスト以外へのデプロイは自動で Disallow になり、
 // 本番と同じ内容が別ドメインでインデックスされる（重複コンテンツ）のを防ぐ。
 export const GET: APIRoute = ({ site }) => {
   const url = site!;
