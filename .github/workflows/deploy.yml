@@ -39,6 +39,9 @@ jobs:
         env:
           MICROCMS_SERVICE_DOMAIN: ${{ secrets.MICROCMS_SERVICE_DOMAIN }}
           MICROCMS_API_KEY: ${{ secrets.MICROCMS_API_KEY }}
+          # Cloudflare Web Analytics のビーコン。本番デプロイのみに設定する
+          # （プレビュー環境の数値を本番に混ぜないため preview-pages.yml には渡さない）
+          PUBLIC_CF_BEACON_TOKEN: ${{ secrets.PUBLIC_CF_BEACON_TOKEN }}
 
       - name: Deploy to Cloudflare Workers
         run: pnpm exec wrangler deploy

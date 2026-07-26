@@ -2,7 +2,7 @@
 import Base from '../../../layouts/Base.astro';
 import FormattedDate from '../../../components/FormattedDate.astro';
 import { SITE } from '../../../data/site';
-import { getAllBlogs, type Blog } from '../../../lib/microcms';
+import { getAllBlogs, optimizedImageUrl, type Blog } from '../../../lib/microcms';
 import { href } from '../../../lib/url';
 
 export async function getStaticPaths() {
@@ -19,6 +19,8 @@ interface Props {
 
 const { blog } = Astro.props;
 
+const siteUrl = new URL(href('/'), Astro.site).href;
+
 const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'BlogPosting',
@@ -30,7 +32,7 @@ const jsonLd = {
   author: {
     '@type': 'Person',
     name: SITE.author,
-    url: SITE.url,
+    url: siteUrl,
   },
   mainEntityOfPage: new URL(href(`/blog/${blog.slug}/`), Astro.site).href,
 };
@@ -63,10 +65,11 @@ const jsonLd = {
       blog.eyecatch && (
         <img
           class="eyecatch"
-          src={blog.eyecatch.url}
+          src={optimizedImageUrl(blog.eyecatch.url, { width: 800 })}
           width={blog.eyecatch.width}
           height={blog.eyecatch.height}
-          alt=""
+          alt={blog.title}
+          decoding="async"
         />
       )
     }

@@ -26,6 +26,22 @@ export type Blog = {
   revisedAt?: string;
 };
 
+/**
+ * microCMS の画像 URL に最適化パラメータを付与する。
+ * microCMS の画像 API は imgix なので、WebP 変換とリサイズをクエリで指定できる。
+ * 外部ホストの画像は astro:assets の対象外なので、こちらで転送量を抑える。
+ */
+export function optimizedImageUrl(
+  url: string,
+  { width, quality = 80 }: { width: number; quality?: number },
+): string {
+  const optimized = new URL(url);
+  optimized.searchParams.set('fm', 'webp');
+  optimized.searchParams.set('w', String(width));
+  optimized.searchParams.set('q', String(quality));
+  return optimized.toString();
+}
+
 const client =
   serviceDomain && apiKey ? createClient({ serviceDomain, apiKey }) : null;
 
