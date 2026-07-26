@@ -13,6 +13,8 @@ interface Props {
   ogType?: 'website' | 'article';
   /** JSON-LD を挿入したい場合に渡す */
   jsonLd?: Record<string, unknown>;
+  /** 検索エンジンにインデックスさせたくないページで true にする */
+  noindex?: boolean;
 }
 
 const {
@@ -21,11 +23,26 @@ const {
   ogImage,
   ogType = 'website',
   jsonLd,
+  noindex = false,
 } = Astro.props;
 
-const pageTitle = title ? `${title} | ${SITE.title}` : `${SITE.title} - ${SITE.role}`;
+const defaultTitle = `${SITE.title} - ${SITE.role}`;
+const pageTitle = title ? `${title} | ${SITE.title}` : defaultTitle;
+// og:site_name でサイト名は別途伝わるため、SNS 用タイトルにはサフィックスを付けない
+const socialTitle = title ?? defaultTitle;
 const canonical = new URL(Astro.url.pathname, Astro.site);
+
+// 本番ホスト以外（GitHub Pages プレビュー等）は全ページを noindex にする。
+// 同一内容が複数ドメインでインデックスされるのを防ぐ。robots.txt を Disallow に
+// せず noindex で外すのは、既にインデックス済みの URL を削除するため。
+const isProductionHost = Astro.site?.hostname === SITE.productionHostname;
+const shouldNoindex = noindex || !isProductionHost;
 const ogImageUrl = ogImage ?? new URL(href('/images/og-default.png'), Astro.site).href;
+
+// Cloudflare Web Analytics のビーコン。Cookie も localStorage も使わないため同意バナーは不要。
+// 本番ビルドかつトークン設定済みのときだけ出力する（dev / トークン未設定の CI では無効）。
+const beaconToken = import.meta.env.PUBLIC_CF_BEACON_TOKEN;
+const enableAnalytics = import.meta.env.PROD && !!beaconToken;
 ---
 
 <!doctype html>
@@ -35,22 +52,28 @@ const ogImageUrl = ogImage ?? new URL(href('/images/og-default.png'), Astro.site
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{pageTitle}</title>
     <meta name="description" content={description} />
+    {shouldNoindex && <meta name="robots" content="noindex, nofollow" />}
     <link rel="canonical" href={canonical} />
     <link rel="icon" href={href('/favicon.svg')} type="image/svg+xml" />
+    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#101418" media="(prefers-color-scheme: dark)" />
     <link
       rel="alternate"
       type="application/rss+xml"
       title={SITE.title}
       href={new URL(href('/rss.xml'), Astro.site)}
     />
-    <meta property="og:title" content={pageTitle} />
+    <meta property="og:title" content={socialTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content={ogType} />
     <meta property="og:url" content={canonical} />
     <meta property="og:image" content={ogImageUrl} />
     <meta property="og:site_name" content={SITE.title} />
+    <meta property="og:locale" content="ja_JP" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:site" content={SITE.xHandle} />
+    <meta name="twitter:creator" content={SITE.xHandle} />
+    <meta name="twitter:title" content={socialTitle} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImageUrl} />
     {jsonLd && <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />}
@@ -68,5 +91,15 @@ const ogImageUrl = ogImage ?? new URL(href('/images/og-default.png'), Astro.site
       <slot />
     </main>
     <Footer />
+    {
+      enableAnalytics && (
+        <script
+          is:inline
+          defer
+          src="https://static.cloudflareinsights.com/beacon.min.js"
+          data-cf-beacon={JSON.stringify({ token: beaconToken })}
+        />
+      )
+    }
   </body>
 </html>

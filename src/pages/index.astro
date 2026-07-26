@@ -1,6 +1,8 @@
 ---
+import { Image } from 'astro:assets';
 import Base from '../layouts/Base.astro';
 import BlogCard from '../components/BlogCard.astro';
+import avatar from '../assets/avatar.jpg';
 import { SITE, ABOUT_LINES, CAREERS } from '../data/site';
 import { getAllBlogs } from '../lib/microcms';
 import { href } from '../lib/url';
@@ -8,23 +10,66 @@ import { href } from '../lib/url';
 const blogs = await getAllBlogs();
 const latestBlogs = blogs.slice(0, 3);
 
+const siteUrl = new URL(href('/'), Astro.site).href;
+const businessId = `${siteUrl}#business`;
+const personId = `${siteUrl}#person`;
+
+// 事業主体（ProfessionalService）・サイト・個人を @graph で相互参照させる
 const jsonLd = {
   '@context': 'https://schema.org',
-  '@type': 'Person',
-  name: SITE.author,
-  alternateName: SITE.handle,
-  jobTitle: SITE.role,
-  email: `mailto:${SITE.email}`,
-  url: SITE.url,
-  sameAs: Object.values(SITE.social),
+  '@graph': [
+    {
+      '@type': 'WebSite',
+      '@id': `${siteUrl}#website`,
+      url: siteUrl,
+      name: SITE.title,
+      description: SITE.description,
+      inLanguage: 'ja',
+      publisher: { '@id': businessId },
+    },
+    {
+      '@type': 'ProfessionalService',
+      '@id': businessId,
+      name: SITE.title,
+      url: siteUrl,
+      description: SITE.description,
+      email: `mailto:${SITE.email}`,
+      areaServed: { '@type': 'Country', name: '日本' },
+      knowsAbout: [...SITE.knowsAbout],
+      founder: { '@id': personId },
+      sameAs: Object.values(SITE.social),
+    },
+    {
+      '@type': 'Person',
+      '@id': personId,
+      name: SITE.author,
+      alternateName: SITE.handle,
+      jobTitle: SITE.role,
+      email: `mailto:${SITE.email}`,
+      url: siteUrl,
+      knowsAbout: [...SITE.knowsAbout],
+      worksFor: { '@id': businessId },
+      sameAs: Object.values(SITE.social),
+    },
+  ],
 };
 ---
 
 <Base jsonLd={jsonLd}>
   <!-- Hero / プロフィール -->
   <section class="section hero">
-    <div class="avatar" aria-hidden="true">
-      <img src={href('/images/avatar.jpg')} alt="profile image" />
+    <div class="avatar">
+      <!-- LCP 要素。width/height を明示して CLS を防ぎ、先読みさせる -->
+      <Image
+        src={avatar}
+        alt={SITE.author}
+        width={240}
+        height={240}
+        densities={[1, 2]}
+        format="webp"
+        loading="eager"
+        fetchpriority="high"
+      />
     </div>
     <h1>{SITE.author}</h1>
     <p class="muted">{SITE.role}</p>
