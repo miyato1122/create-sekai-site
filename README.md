@@ -69,7 +69,8 @@ microCMS 管理画面の Webhook（カスタム通知）に GitHub API を設定
 ## SEO
 
 - canonical / OGP / sitemap / JSON-LD の URL はすべて **`astro.config.mjs` の `site`（環境変数 `SITE_URL` で上書き可）を単一の情報源**とする。サイトの URL を定数として別に持たないこと（ドメイン不一致の原因になる）。
-- `robots.txt` は `src/pages/robots.txt.ts` で動的生成する。**本番ホスト（`create-sekai.com`）以外へのデプロイは自動的に `Disallow: /` になる**ため、GitHub Pages プレビューが重複コンテンツとしてインデックスされない。
+- **本番ホスト（`SITE.productionHostname`）以外へのデプロイは、全ページに `<meta name="robots" content="noindex, nofollow">` が入る**（`src/layouts/Base.astro`）。GitHub Pages プレビューが重複コンテンツとしてインデックスされるのを防ぐ。
+- `robots.txt` は `src/pages/robots.txt.ts` で動的生成する。**本番以外でも `Disallow` にはしない。** Disallow するとクローラが HTML を取得できず上記の `noindex` を読めないため、既にインデックスされた URL を削除できなくなる。「クロール許可 + noindex」が正しい組み合わせ。`Sitemap` 行は本番でのみ出力する。
 - Google Search Console にはドメインプロパティ（DNS TXT 認証）で登録し、`https://create-sekai.com/sitemap-index.xml` を送信する。
 
 ## アクセス計測

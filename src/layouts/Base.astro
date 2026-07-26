@@ -31,6 +31,12 @@ const pageTitle = title ? `${title} | ${SITE.title}` : defaultTitle;
 // og:site_name でサイト名は別途伝わるため、SNS 用タイトルにはサフィックスを付けない
 const socialTitle = title ?? defaultTitle;
 const canonical = new URL(Astro.url.pathname, Astro.site);
+
+// 本番ホスト以外（GitHub Pages プレビュー等）は全ページを noindex にする。
+// 同一内容が複数ドメインでインデックスされるのを防ぐ。robots.txt を Disallow に
+// せず noindex で外すのは、既にインデックス済みの URL を削除するため。
+const isProductionHost = Astro.site?.hostname === SITE.productionHostname;
+const shouldNoindex = noindex || !isProductionHost;
 const ogImageUrl = ogImage ?? new URL(href('/images/og-default.png'), Astro.site).href;
 
 // Cloudflare Web Analytics のビーコン。Cookie も localStorage も使わないため同意バナーは不要。
@@ -46,7 +52,7 @@ const enableAnalytics = import.meta.env.PROD && !!beaconToken;
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{pageTitle}</title>
     <meta name="description" content={description} />
-    {noindex && <meta name="robots" content="noindex, nofollow" />}
+    {shouldNoindex && <meta name="robots" content="noindex, nofollow" />}
     <link rel="canonical" href={canonical} />
     <link rel="icon" href={href('/favicon.svg')} type="image/svg+xml" />
     <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
